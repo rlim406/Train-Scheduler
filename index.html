@@ -25,7 +25,7 @@
       <p class="lead">Because there is no such thing as being fashionably late</p>
     </div>
 
-    <table class="table">
+    <table class="table" id="trainTable">
       <thead>
         <td colspan="5">Current Train Schedule</td>
       </thead>
@@ -83,18 +83,13 @@
 
     var database = firebase.database();
 
-    var trainName = "";
-    var destination = "";
-    var firstTrain = "";
-    var frequency = "";
-
     $("#addTrain").on("click", function (event) {
       event.preventDefault();
 
-      trainName = $("#trainName").val().trim();
-      destination = $("#destination").val().trim();
-      firstTrain = $("#firstTrain").val().trim();
-      frequency = $("#frequency").val().trim();
+      var trainName = $("#trainName").val().trim();
+      var destination = $("#destination").val().trim();
+      var firstTrain = $("#firstTrain").val().trim();
+      var frequency = $("#frequency").val().trim();
 
       database.ref().push({
         trainName: trainName,
@@ -118,9 +113,44 @@
       console.log(train.firstTrain);
       console.log(train.frequency);
 
+      var trainName = snapshot.val().trainName;
+      var destination = snapshot.val().destination;
+      var firstTrain = snapshot.val().firstTrain;
+      var frequency = snapshot.val().frequency;
+
+      var firstTrainConverted = moment(firstTrain, "HH:mm").subtract(1, "years");
+
+      var currentTime = moment()
+      console.log("Current Time: " + moment(currentTime).format("hh:mm"));
+
+      var difference = moment().diff(moment(firstTrainConverted), "minutes");
+      console.log("Difference: " + difference);
+
+      var remainder = difference % frequency;
+      console.log(remainder);
+
+      var minutesAway = frequency - remainder;
+      console.log("Minutes Away: " + minutesAway);
+
+      var nextTrain = moment().add(minutesAway, "minutes").format("HH:mm");
+      console.log("Next Arrival: " + moment(nextTrain).format("hh:mm"));
+
+      var newRow = $("<tr>").append(
+        $("<td>").text(trainName),
+        $("<td>").text(destination),
+        $("<td>").text(frequency),
+        $("<td>").text(nextTrain),
+        $("<td>").text(minutesAway),
+      );
+
+      // Append the new row to the table
+      $("#trainTable > tbody").append(newRow);
+
     }, function (errorObject) {
       console.log("Errors handled: " + errorObject.code);
     });
+
+
 
   </script>
 
