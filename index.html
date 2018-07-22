@@ -6,11 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Train Scheduler</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-  <!-- Firebase Reference -->
-  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
 
   <!-- Moment.js Reference -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
@@ -52,18 +53,76 @@
         <input type="text" class="form-control" id="destination">
       </div>
       <div class="form-group">
-        <label for="firstTrain">First Train Time</label>
-        <input type="time" class="form-control" id="firstTrain">
+        <label for="firstTrain">First Train Time (HH:mm - Military Time)</label>
+        <input type="text" class="form-control" id="firstTrain">
       </div>
       <div class="form-group">
-        <label for="frequency">Frequency</label>
-        <input type="time" class="form-control" id="frequency">
+        <label for="frequency">Frequency (mins)</label>
+        <input type="number" class="form-control" id="frequency">
       </div>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" id="addTrain" class="btn btn-primary">Submit</button>
     </form>
 
   </div>
+
+
+  <script>
+    // Initialize Firebase
+
+    var config = {
+      apiKey: "AIzaSyCoohK7x-IGawffG1RD7BYml54L-C8rDSs",
+      authDomain: "bootcamptest-476e6.firebaseapp.com",
+      databaseURL: "https://bootcamptest-476e6.firebaseio.com",
+      projectId: "bootcamptest-476e6",
+      storageBucket: "bootcamptest-476e6.appspot.com",
+      messagingSenderId: "866499621554"
+    };
+    firebase.initializeApp(config);
+
+
+    var database = firebase.database();
+
+    var trainName = "";
+    var destination = "";
+    var firstTrain = "";
+    var frequency = "";
+
+    $("#addTrain").on("click", function (event) {
+      event.preventDefault();
+
+      trainName = $("#trainName").val().trim();
+      destination = $("#destination").val().trim();
+      firstTrain = $("#firstTrain").val().trim();
+      frequency = $("#frequency").val().trim();
+
+      database.ref().push({
+        trainName: trainName,
+        destination: destination,
+        firstTrain: firstTrain,
+        frequency: frequency,
+      })
+
+      $("#trainName").val("");
+      $("#destination").val("");
+      $("#firstTrain").val("");
+      $("#frequency").val("");
+    });
+
+    database.ref().on("child_added", function (snapshot) {
+
+      var train = snapshot.val();
+
+      console.log(train.trainName);
+      console.log(train.destination);
+      console.log(train.firstTrain);
+      console.log(train.frequency);
+
+    }, function (errorObject) {
+      console.log("Errors handled: " + errorObject.code);
+    });
+
+  </script>
 
 </body>
 
