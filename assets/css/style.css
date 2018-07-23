@@ -1,0 +1,13 @@
+#main{
+  background: url("london-tube.jpg")no-repeat center center fixed;
+  background-size:cover;
+  opacity: 0.9;
+}
+
+#trainTable, #info, .jumbotron{
+  background-color: lightblue;
+}
+
+h3{
+  color:rgb(223, 39, 69);
+}

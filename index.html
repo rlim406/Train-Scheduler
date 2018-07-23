@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
 
   <script src="https://code.jquery.com/jquery.js"></script>
 
@@ -17,7 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
 </head>
 
-<body>
+<body id="main">
 
   <div class="container">
     <div class="jumbotron">
@@ -25,10 +26,8 @@
       <p class="lead">Because there is no such thing as being fashionably late</p>
     </div>
 
+    <h3>Current Train Schedule</h3>
     <table class="table" id="trainTable">
-      <thead>
-        <td colspan="5">Current Train Schedule</td>
-      </thead>
       <thead class="thead-light">
         <tr>
           <th scope="col">Train Name</th>
@@ -43,7 +42,9 @@
       </tbody>
     </table>
 
-    <form>
+    <h3>Add Train</h3>
+    <form id="info" class="container">
+      <br>
       <div class="form-group">
         <label for="trainName">Train Name</label>
         <input type="text" class="form-control" id="trainName">
